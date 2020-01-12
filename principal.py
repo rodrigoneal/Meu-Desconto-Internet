@@ -11,6 +11,11 @@ path = 'log.csv'
 requisicao = Requisicao(url)
 lista = []
 if __name__ == '__main__':
+
+    """
+    Menu simples
+    
+    """
     escolha = 0
     while True:
         print('***' * 10, 'MENU', '***' * 10)
