@@ -215,3 +215,56 @@ class Requisicao:
         data = str(d1)[11:]
         return f'Você ficou {dia} dias e  {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n'
 
+
+    def relatorio(self):
+        lista = []
+        dados = []
+        segundos = []
+        minutos = []
+        horas = []
+        dia = 0
+        error = []
+        path = 'log.csv'
+        with open(path, 'r', newline='') as csvfile:
+            escrever = csv.reader(csvfile)
+            for i in escrever:
+                lista.append(i)
+        for i in range(len(lista)):
+            dados.append(lista[i][0][:10])
+        dados = sorted(set(dados))
+        print('Por favor')
+        for i in dados:
+            error.append(dados.index(i))
+
+            print(f'Digite {dados.index(i) + 1} para relatorio do dia {i}')
+
+        dia = int(input(': ')) - 1
+        while True:
+            if dia in error:
+                selecionado = dados[dia]
+                break
+            else:
+                print('Data Invalida')
+                selecionado = int(input('Digite Uma data Valida '))
+        for i in range(len(lista)):
+            if selecionado == lista[i][0][:10]:
+                converter = str(lista[i][2])
+                converter = converter.split(':')
+                segundos.append(int(converter[2]))
+                minutos.append(int(converter[1]))
+                horas.append(int(converter[0]))
+        segundos = sum(segundos)
+        minutos = sum(minutos)
+        horas = sum(horas)
+        for i in range(len(lista)):
+            if segundos >= 60:
+                minutos += 1
+                segundos -= 60
+            if minutos >= 60:
+                horas += 1
+                minutos -= 60
+        s = f'{horas}:{minutos}:{segundos}'
+        fmt = '%H:%M:%S'
+        d1 = datetime.strptime(s, fmt)
+        data = str(d1)[11:]
+        print(f'No dia {dados[dia]} você ficou {data} sem internet')

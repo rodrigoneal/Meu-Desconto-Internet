@@ -24,11 +24,13 @@ if __name__ == '__main__':
         print('Digite 2 para começar uma analise da sua internet')
         print('***' * 20)
         escolha = int(input(': '))
-        print('***' * 20)
+
         time.sleep(1)
         os.system('cls')
         if escolha == 1:
             os.system('cls')
+            requisicao.relatorio()
+            print('***' * 20)
             print(requisicao.desconto())
             time.sleep(5)
             print('***' * 10, 'MENU', '***' * 10)
@@ -39,6 +41,8 @@ if __name__ == '__main__':
             escolha = int(input(': '))
             if escolha == 1:
                 os.system('cls')
+                requisicao.relatorio()
+                print('***' * 20)
                 print(requisicao.desconto())
                 time.sleep(5)
             elif escolha == 2:
