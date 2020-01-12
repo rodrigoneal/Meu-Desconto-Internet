@@ -56,7 +56,6 @@ if __name__ == '__main__':
         conectar = requisicao.conectar()
 
         print(conectar)
-
         while conectar[0] == 2:
             """  
             Verifica se está sem internet se estiver fica em um loop alimentado a variavel lista com todas as tentativas de 
