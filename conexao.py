@@ -213,7 +213,7 @@ class Requisicao:
         fmt = '%H:%M:%S'
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
-        return f'Você ficou {dia} dias e  {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n'
+        print(f'Você ficou {dia} dias e  {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
 
     def relatorio(self):
@@ -268,3 +268,12 @@ class Requisicao:
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
         print(f'No dia {dados[dia]} você ficou {data} sem internet')
+
+    def menu(self):
+        print('*_*-' * 5, 'Menu', '*_*-' * 5)
+        print('Digite 1: Para relatório por dia')
+        print('Digite 2: Para relatório de descontos')
+        print('Digite 3: Para Analise da internet')
+        print('Digite 4: Para fechar o programa')
+        escolha = int(input(': '))
+        return escolha
