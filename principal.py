@@ -2,7 +2,6 @@ import datetime
 import os
 import time
 import sys
-
 import conexao
 from conexao import Requisicao
 
@@ -16,41 +15,29 @@ if __name__ == '__main__':
     Menu simples
     
     """
-    escolha = 0
     while True:
-        print('***' * 10, 'MENU', '***' * 10)
-        print('Por favor escolha uma alternativa: ')
-        print('Digite 1 para relatorio de desconto')
-        print('Digite 2 para começar uma analise da sua internet')
-        print('***' * 20)
-        escolha = int(input(': '))
-
-        time.sleep(1)
-        os.system('cls')
-        if escolha == 1:
+        selecionar = requisicao.menu()
+        if selecionar == 1:
             os.system('cls')
-            requisicao.relatorio()
-            print('***' * 20)
-            print(requisicao.desconto())
+            relatorio_dia = requisicao.relatorio()
             time.sleep(5)
-            print('***' * 10, 'MENU', '***' * 10)
-            print('Pressione 1 relatorio de desconto novamente :')
-            print('Pressione 2 para continuar com a verificação da sua internet:')
-            print('Digite 3 para fechar o programa')
-            print('***' * 20)
-            escolha = int(input(': '))
-            if escolha == 1:
-                os.system('cls')
-                requisicao.relatorio()
-                print('***' * 20)
-                print(requisicao.desconto())
-                time.sleep(5)
-            elif escolha == 2:
-                break
-            else:
-                sys.exit()
-        else:
+            os.system('cls')
+        elif selecionar == 2:
+            os.system('cls')
+            relatorio_desconto = requisicao.desconto()
+            time.sleep(5)
+            os.system('cls')
+        elif selecionar == 3:
+            os.system('cls')
             break
+        elif selecionar == 4:
+            sys.exit()
+        else:
+            os.system('cls')
+            print('Favor digitar uma opção valida')
+            os.system('cls')
+            time.sleep(5)
+            continue
 
 
 
