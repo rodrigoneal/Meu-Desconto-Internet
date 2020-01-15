@@ -1,4 +1,4 @@
-# Meu-Desconto-Internet
+# Meu Desconto Internet
 ## Um projeto que faz um teste se a internet está funcionando e faz todo log com as informações da hora da queda e volta, velocidade e clima
 
 Esse projeto foi algo pensado nos descontos que deixamos de receber nos dias que ficamos sem internet.
