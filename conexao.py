@@ -4,6 +4,8 @@ import time
 import requests
 from datetime import datetime
 from pushbullet import Pushbullet
+from locale import setlocale, LC_ALL
+from calendar import month_name
 
 def pushbullet(mensagem):
     for i in mensagem:
@@ -213,7 +215,7 @@ class Requisicao:
         fmt = '%H:%M:%S'
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
-        print(f'Você ficou {dia} dias e  {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+        print(f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
 
     def relatorio(self):
@@ -272,8 +274,62 @@ class Requisicao:
     def menu(self):
         print('*_*-' * 5, 'Menu', '*_*-' * 5)
         print('Digite 1: Para relatório por dia')
-        print('Digite 2: Para relatório de descontos')
-        print('Digite 3: Para Analise da internet')
-        print('Digite 4: Para fechar o programa')
+        print('Digite 2: Para relatório por mes')
+        print('Digite 3: Para relatório de descontos')
+        print('Digite 4: Para Analise da internet')
+        print('Digite 5: Para fechar o programa')
         escolha = int(input(': '))
         return escolha
+
+    def mes(self):
+        path = 'log.csv'
+        mes = []
+        lista = []
+        hora = []
+        minuto = []
+        segundo = []
+        setlocale(LC_ALL, 'pt-BR')
+        with open(path, 'r', newline='') as csvfile:
+            escrever = csv.reader(csvfile)
+            indice = escrever
+
+            for i in indice:
+                try:
+                    lista.append(i)
+                    mes.append(i[0][3:5])
+                except:
+                    IndexError
+        mes = sorted(set(mes))
+        for i in mes:
+            print(f'Digite {mes.index(i) + 1} para o mes de {month_name[int(i)].capitalize()}')
+
+        escolha = int(input(': ')) - 1
+        for i in range(len(lista)):
+            try:
+                if lista[i][0][3:5] == mes[escolha]:
+                    get = (lista[i][2])
+                    get = get.split(':')
+                    segundo.append(int(get[2]))
+                    minuto.append(int(get[1]))
+                    hora.append(int(get[0]))
+            except:
+                IndexError
+        segundo = sum(segundo)
+        minuto = sum(minuto)
+        hora = sum(hora)
+        dia = 0
+        cont = 0
+        while cont < len(lista):
+            if segundo > 59:
+                minuto += 1
+                segundo -= 59
+            if minuto > 59:
+                hora += 1
+                minuto -= 59
+            if hora > 23:
+                dia += 1
+                hora -= 23
+                dia += 1
+            cont += 1
+        print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
+

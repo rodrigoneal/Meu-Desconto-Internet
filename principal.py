@@ -24,13 +24,18 @@ if __name__ == '__main__':
             os.system('cls')
         elif selecionar == 2:
             os.system('cls')
-            relatorio_desconto = requisicao.desconto()
+            relatorio_desconto = requisicao.mes()
             time.sleep(5)
             os.system('cls')
         elif selecionar == 3:
             os.system('cls')
-            break
+            relatorio_desconto = requisicao.desconto()
+            time.sleep(5)
+            os.system('cls')
         elif selecionar == 4:
+            os.system('cls')
+            break
+        elif selecionar == 5:
             sys.exit()
         else:
             os.system('cls')
