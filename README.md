@@ -7,3 +7,10 @@ Basicamente ele faz um request na pagina de internet e se não conseguir retorno
 Ele talbém calcula o delta do tempo que ficou sem internet com o preço da internet e retorna um valor de desconto que você deve pedir a sua operadora 
 
 Estou trabalhando em um projeto que atenda todos. Em breve irei disponibilizar algo mais viavel e comercial
+
+### Planos fututos:
+1 - Criar um banco de dados e parar de salvar em um arquivo CSV
+
+2 - Criar uma GUI para o usuario e aumentar o numero de funções
+
+3 - Criar um interação mais fácil e  responsiva entre as funções permitido escolher o que deve ser testado
