@@ -1,7 +1,8 @@
 import datetime
 import os
-import time
 import sys
+import time
+
 import conexao
 from conexao import Requisicao
 
@@ -10,6 +11,11 @@ path = 'log.csv'
 requisicao = Requisicao(url)
 lista = []
 cidade = 'Rio de Janeiro'
+def sistema():
+    if os.name == 'posix':
+        os.system('clear')
+    else:
+        os.system('cls')
 if __name__ == '__main__':
 
     """
@@ -19,29 +25,29 @@ if __name__ == '__main__':
     while True:
         selecionar = requisicao.menu()
         if selecionar == 1:
-            os.system('cls')
+            sistema()
             relatorio_dia = requisicao.relatorio_dia()
             time.sleep(5)
-            os.system('cls')
+            sistema()
         elif selecionar == 2:
-            os.system('cls')
+            sistema()
             relatorio_mes = requisicao.relatorio_mes()
             time.sleep(5)
-            os.system('cls')
+            sistema()
         elif selecionar == 3:
-            os.system('cls')
+            sistema()
             relatorio_desconto = requisicao.desconto()
             time.sleep(5)
-            os.system('cls')
+            sistema()
         elif selecionar == 4:
-            os.system('cls')
+            sistema()
             break
         elif selecionar == 5:
             sys.exit()
         else:
-            os.system('cls')
+            sistema()
             print('Favor digitar uma opção valida')
-            os.system('cls')
+            sistema()
             time.sleep(5)
 
 
@@ -65,7 +71,7 @@ if __name__ == '__main__':
             """
             print('Sem internet', flush=True)
             time.sleep(1)
-            os.system('cls')
+            sistema()
 
             conectar = requisicao.conectar()
             lista.append(conectar)
@@ -79,7 +85,7 @@ if __name__ == '__main__':
                  """
                 print('Internet restabelecida', flush=True)
                 time.sleep(1)
-                os.system('cls')
+                sistema()
 
                 conectar = requisicao.conectar()
                 lista.append(conectar)
