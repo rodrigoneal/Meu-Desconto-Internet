@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import csv
 import os
 import time
@@ -79,7 +82,7 @@ class Requisicao:
 
         """
 
-        with open(path, 'a', newline='') as csvfile:
+        with open(path, 'a', newline='', encoding="ISO-8859-1") as csvfile:
             escrever = csv.writer(csvfile)
             escrever.writerow(args)
 
@@ -163,7 +166,7 @@ class Requisicao:
         minuto = []
         segundo = []
         path = 'log.csv'
-        with open(path, 'r', newline='') as csvfile:
+        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
             escrever = csv.reader(csvfile)
             for i in escrever:
                 try:
@@ -225,7 +228,7 @@ class Requisicao:
         horas = []
         error = []
         path = 'log.csv'
-        with open(path, 'r', newline='') as csvfile:
+        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
             escrever = csv.reader(csvfile)
             for i in escrever:
                 lista.append(i)
@@ -281,9 +284,7 @@ class Requisicao:
 
     def relatorio_mes(self):
 
-
         from calendar import month_name
-
 
         path = 'log.csv'
         mes = []
@@ -291,7 +292,7 @@ class Requisicao:
         hora = []
         minuto = []
         segundo = []
-        with open(path, 'r', newline='') as csvfile:
+        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
             escrever = csv.reader(csvfile)
             indice = escrever
 
