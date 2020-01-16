@@ -4,8 +4,7 @@ import time
 import requests
 from datetime import datetime
 from pushbullet import Pushbullet
-from locale import setlocale, LC_ALL
-from calendar import month_name
+
 
 def pushbullet(mensagem):
     for i in mensagem:
@@ -17,6 +16,7 @@ def pushbullet(mensagem):
         push = pb.push_note("A internet Acabou de se recuperar", envio, celular)
     except:
         raise print('Falha ao enviar mensagem')
+
 
 def getHora():
     """
@@ -45,6 +45,7 @@ def getClima(cidade):
         return status
     except:
         raise print('Erro ao se comunicar com a central do tempo')
+
 
 class Requisicao:
     """
@@ -77,7 +78,6 @@ class Requisicao:
         Salva um arquivo CSV no caminho(path) informado
 
         """
-
 
         with open(path, 'a', newline='') as csvfile:
             escrever = csv.writer(csvfile)
@@ -126,6 +126,7 @@ class Requisicao:
                 time.sleep(1)
                 os.system('cls')
             cont -= 1
+
     def speed(self):
         """
         Faz um teste de velocidade após a internet voltar a funcionar
@@ -156,7 +157,6 @@ class Requisicao:
         pelo tempo sem internet
 
         """
-
 
         lista = []
         hora = []
@@ -214,16 +214,15 @@ class Requisicao:
         fmt = '%H:%M:%S'
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
-        print(f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+        print(
+            f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
-
-    def relatorio(self):
+    def relatorio_dia(self):
         lista = []
         dados = []
         segundos = []
         minutos = []
         horas = []
-        dia = 0
         error = []
         path = 'log.csv'
         with open(path, 'r', newline='') as csvfile:
@@ -280,14 +279,18 @@ class Requisicao:
         escolha = int(input(': '))
         return escolha
 
-    def mes(self):
+    def relatorio_mes(self):
+
+
+        from calendar import month_name
+
+
         path = 'log.csv'
         mes = []
         lista = []
         hora = []
         minuto = []
         segundo = []
-        setlocale(LC_ALL, 'pt-BR')
         with open(path, 'r', newline='') as csvfile:
             escrever = csv.reader(csvfile)
             indice = escrever
@@ -330,4 +333,3 @@ class Requisicao:
                 hora -= 23
             cont += 1
         print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
-
