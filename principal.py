@@ -50,8 +50,9 @@ if __name__ == '__main__':
         else:
             sistema()
             print('Favor digitar uma opção valida')
-            sistema()
             time.sleep(5)
+            sistema()
+
 
 
 
