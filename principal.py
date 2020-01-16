@@ -20,12 +20,12 @@ if __name__ == '__main__':
         selecionar = requisicao.menu()
         if selecionar == 1:
             os.system('cls')
-            relatorio_dia = requisicao.relatorio()
+            relatorio_dia = requisicao.relatorio_dia()
             time.sleep(5)
             os.system('cls')
         elif selecionar == 2:
             os.system('cls')
-            relatorio_mes = requisicao.mes()
+            relatorio_mes = requisicao.relatorio_mes()
             time.sleep(5)
             os.system('cls')
         elif selecionar == 3:
@@ -43,7 +43,6 @@ if __name__ == '__main__':
             print('Favor digitar uma opção valida')
             os.system('cls')
             time.sleep(5)
-            continue
 
 
 
