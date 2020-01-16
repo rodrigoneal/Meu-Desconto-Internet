@@ -1,54 +1,31 @@
+'''from conexao import Requisicao
+requisicao = Requisicao('url')
+velocidade = requisicao.speed()
+print(velocidade[0])'''
 import csv
-from locale import setlocale, LC_ALL
-from calendar import month_name
-path = 'log.csv'
-mes = []
 lista = []
-hora = []
-minuto = []
-segundo = []
-setlocale(LC_ALL, 'pt-BR')
-with open(path, 'r', newline='') as csvfile:
-    escrever = csv.reader(csvfile)
-    indice = escrever
+down = []
+up = []
+ping = []
+contratado_down = 30
+contratado_up = 15
+with open('log.csv', 'r', newline='', encoding="ISO-8859-1") as csvfile:
+    ler = csv.reader(csvfile)
+    for i in ler:
+        lista.append(i[3])
 
-    for i in indice:
-        try:
-            lista.append(i)
-            mes.append(i[0][3:5])
-        except:
-            IndexError
-mes = sorted(set(mes))
-for i in mes:
-    print(f'Digite {mes.index(i)+1} para o mes de {month_name[int(i)].capitalize()}')
-
-escolha = int(input(': ')) - 1
-print(escolha)
 for i in range(len(lista)):
-    try:
-        if lista[i][0][3:5] == mes[escolha]:
-            get = (lista[i][2])
-            get = get.split(':')
-            segundo.append(int(get[2]))
-            minuto.append(int(get[1]))
-            hora.append(int(get[0]))
-    except:
-        IndexError
-segundo = sum(segundo)
-minuto = sum(minuto)
-hora = sum(hora)
-dia = 0
-cont = 0
-while cont < len(lista):
-    if segundo > 59:
-        minuto += 1
-        segundo -= 59
-    if minuto > 59:
-        hora += 1
-        minuto -= 59
-    if hora > 23:
-        dia += 1
-        hora -= 23
-        dia += 1
-    cont += 1
-print(f'O tempo gasto no {mes} foi de {hora}:{minuto}:{segundo}')
+    down.append(int(lista[i][12:14]))
+    up.append(int(lista[i][31:33]))
+    ping.append(int(lista[i][48]))
+
+media_down = sum(down) / len(down)
+media_down = round(media_down)
+print(media_down)
+porcento_down = (media_down/contratado_down) * 100
+print(porcento_down)
+media_up = sum(up) / len(up)
+porcento_up = (media_up/contratado_up) * 100
+print(porcento_up)
+media_ping = sum(ping) / len(ping)
+print(media_ping)
