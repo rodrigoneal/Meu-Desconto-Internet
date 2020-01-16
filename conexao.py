@@ -274,11 +274,12 @@ class Requisicao:
 
     def menu(self):
         print('*_*-' * 5, 'Menu', '*_*-' * 5)
-        print('Digite 1: Para relatório por dia')
-        print('Digite 2: Para relatório por mes')
-        print('Digite 3: Para relatório de descontos')
-        print('Digite 4: Para Analise da internet')
-        print('Digite 5: Para fechar o programa')
+        print('Digite 1: Para Relatório por dia')
+        print('Digite 2: Para Relatório por mes')
+        print('Digite 3: Para Relatório de descontos')
+        print('Digite 4: Para Qualidade da sua internet')
+        print('Digite 5: Para Analise da internet')
+        print('Digite 6: Para Fechar o programa')
         escolha = int(input(': '))
         return escolha
 
@@ -334,3 +335,36 @@ class Requisicao:
                 hora -= 23
             cont += 1
         print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
+
+    def media_internet(self, vdown, vup):
+        lista = []
+        down = []
+        up = []
+        ping = []
+        contratado_down = vdown
+        contratado_up = vup
+        with open('log.csv', 'r', newline='', encoding="ISO-8859-1") as csvfile:
+            ler = csv.reader(csvfile)
+            for i in ler:
+                lista.append(i[3])
+
+        for i in range(len(lista)):
+            down.append(int(lista[i][12:14]))
+            up.append(int(lista[i][31:33]))
+            ping.append(int(lista[i][48]))
+
+        media_down = sum(down) / len(down)
+        media_down = round(media_down)
+        print(media_down)
+        porcento_down = (media_down / contratado_down) * 100
+
+        media_up = sum(up) / len(up)
+        porcento_up = (media_up / contratado_up) * 100
+
+        media_ping = sum(ping) / len(ping)
+
+        print(f'Sua Internet contratada é de {contratado_down} de download e {contratado_up} de upload')
+        print(f'A sua média de download foi {media_down} correspondendo à {porcento_down}% da sua velocidade '
+              f'contratada')
+        print(f'A sua média de Upload foi {media_up} correspondendo à {porcento_up}% da sua velocidade contratada')
+        print(f'Sua Média de latencia foi de {media_ping}')

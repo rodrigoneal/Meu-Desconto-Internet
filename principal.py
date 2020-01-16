@@ -44,9 +44,17 @@ if __name__ == '__main__':
             sistema()
         elif selecionar == 4:
             sistema()
+            vdown = int(input('Velocidade de Download contratada em MB: '))
+            vup = int(input('Velocidade de Upload contratada em MB: '))
+            qualidade = requisicao.media_internet(vdown, vup)
+            time.sleep(7)
+            sistema()
+        elif selecionar == 5:
+            sistema()
             break
         elif selecionar == 5:
             sys.exit()
+
         else:
             sistema()
             print('Favor digitar uma opção valida')
