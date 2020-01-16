@@ -72,16 +72,18 @@ class Requisicao:
         except:
             return 2, hora
 
-    def salvar(self, save, path):
+    def salvar(self, *args, path):
         """
         Salva um arquivo CSV no caminho(path) informado
 
         """
+
+
         with open(path, 'a', newline='') as csvfile:
             escrever = csv.writer(csvfile)
-            escrever.writerow(save)
+            escrever.writerow(args)
 
-    def diferenca(self, lista,cidade):
+    def diferenca(self, lista):
         """
         Recebe  uma lista de requisição, pega a primeira e a ultima tentativa de conexão. Muda o tempo para String
         e calcula o tempo que ficou sem internet.
@@ -89,17 +91,14 @@ class Requisicao:
         :return a hora que caiu e a hora que voltou mais e o calculo do tempo que ficou sem internet em minutos.
 
         """
-        s = str(lista[0][1]).replace(',', '')
-        t = str(lista[-1][1]).replace(',', '')
-        print(s)
-        print(t)
+        queda = str(lista[0][1]).replace(',', '')
+        volta = str(lista[-1][1]).replace(',', '')
         fmt = '%d/%m/%Y %H:%M:%S'
-        d1 = datetime.strptime(s, fmt)
-        d2 = datetime.strptime(t, fmt)
-        valor = (d2 - d1)
-        velocidade = self.speed()
-        clima = getClima(cidade)
-        return s, t, valor, velocidade, clima
+        d1 = datetime.strptime(queda, fmt)
+        d2 = datetime.strptime(volta, fmt)
+        tempooff = (d2 - d1)
+        tempooff = str(tempooff)
+        return queda, volta, tempooff
 
     def cronometro(self, tempo, mensagem):
         """
@@ -142,9 +141,9 @@ class Requisicao:
             s.download()
             s.upload()
             res = s.results.dict()
-            down = ('Download: {:.2f} Kb/s'.format(res["download"] / 1024))
-            up = ('Upload: {:.2f} Kb/s'.format(round(res["upload"] / 1024)))
-            ping = ('Ping: {}'.format(res["ping"]))
+            down = ('Download: {:.0f} MB/s'.format(round(res["download"] / 1024 / 1024)))
+            up = ('Upload: {:.0f} MB/s'.format(round(res["upload"] / 1024 / 1024)))
+            ping = ('Ping: {:.0f}'.format(res["ping"]))
             return down, up, ping
         except:
             return None
@@ -195,7 +194,7 @@ class Requisicao:
             if minuto > 59:
                 hora += 1
                 minuto -= 59
-            if hora > 23:
+            if hora >= 23:
                 dia += 1
                 hora -= 23
                 getdia = dia
@@ -329,7 +328,6 @@ class Requisicao:
             if hora > 23:
                 dia += 1
                 hora -= 23
-                dia += 1
             cont += 1
         print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
 
