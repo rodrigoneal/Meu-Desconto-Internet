@@ -9,6 +9,7 @@ url = 'https://www.google.com/'
 path = 'log.csv'
 requisicao = Requisicao(url)
 lista = []
+cidade = 'Rio de Janeiro'
 if __name__ == '__main__':
 
     """
@@ -24,7 +25,7 @@ if __name__ == '__main__':
             os.system('cls')
         elif selecionar == 2:
             os.system('cls')
-            relatorio_desconto = requisicao.mes()
+            relatorio_mes = requisicao.mes()
             time.sleep(5)
             os.system('cls')
         elif selecionar == 3:
@@ -77,15 +78,19 @@ if __name__ == '__main__':
                 
                 Faz um teste de velocidade
                  """
-
+                print('Internet restabelecida', flush=True)
+                time.sleep(1)
+                os.system('cls')
 
                 conectar = requisicao.conectar()
                 lista.append(conectar)
-                diferenca = requisicao.diferenca(lista,'Rio de Janeiro')
+                diferenca = requisicao.diferenca(lista)
                 # sem internet
                 lista.clear()
                 push = conexao.pushbullet(diferenca)
-                salvar = requisicao.salvar(diferenca, path)  # Salva essa diferença em um arquivo CSV
+                velocidade = requisicao.speed()
+                clima = conexao.getClima(cidade)
+                salvar = requisicao.salvar(*diferenca, velocidade, clima, path=path)  # Salva essa diferença em um arquivo CSV
                 break
 
         mensagem = 'Internet sem falha'
