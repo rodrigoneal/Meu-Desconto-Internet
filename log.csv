@@ -1,9 +1,9 @@
 07/01/2020 03:20:51,07/01/2020 11:41:14,8:20:23,"('Download: 20239.80 Kb/s', 'Upload: 11624.96 Kb/s', 'Ping: 4.583')"
 07/01/2020 19:12:21,07/01/2020 20:45:58,1:33:37,"('Download: 26995.47 Kb/s', 'Upload: 12091.49 Kb/s', 'Ping: 8.32')"
 07/01/2020 22:30:22,08/01/2020 10:05:28,11:35:06,"('Download: 28185.92 Kb/s', 'Upload: 6654.43 Kb/s', 'Ping: 6.173')"
-10/01/2020 01:58:09,10/01/2020 01:58:34,0:00:25,"('Download: 25163.51 Kb/s', 'Upload: 11971.58 Kb/s', 'Ping: 4.756')", detailed status=nuvens quebradas>
-10/01/2020 02:16:42,10/01/2020 02:17:13,0:00:31,"('Download: 26428.15 Kb/s', 'Upload: 11562.76 Kb/s', 'Ping: 3.573')",broken clouds
-10/01/2020 02:18:47,10/01/2020 02:18:59,0:00:12,"('Download: 28053.32 Kb/s', 'Upload: 11894.49 Kb/s', 'Ping: 5.713')",broken clouds
+10/01/2020 01:58:09,10/01/2020 01:58:34,0:00:25,"('Download: 25163.51 Kb/s', 'Upload: 11971.58 Kb/s', 'Ping: 4.756')",Céu limpo com poucas nuvens
+10/01/2020 02:16:42,10/01/2020 02:17:13,0:00:31,"('Download: 26428.15 Kb/s', 'Upload: 11562.76 Kb/s', 'Ping: 3.573')",Céu limpo com poucas nuvens
+10/01/2020 02:18:47,10/01/2020 02:18:59,0:00:12,"('Download: 28053.32 Kb/s', 'Upload: 11894.49 Kb/s', 'Ping: 5.713')",Céu limpo com poucas nuvens
 10/01/2020 02:19:53,10/01/2020 02:20:17,0:00:24,"('Download: 27962.39 Kb/s', 'Upload: 8321.01 Kb/s', 'Ping: 3.295')",Céu limpo com poucas nuvens
 10/01/2020 02:40:15,10/01/2020 02:40:21,0:00:06,"('Download: 23692.28 Kb/s', 'Upload: 12153.91 Kb/s', 'Ping: 3.859')",Céu limpo com poucas nuvens
 10/01/2020 02:45:29,10/01/2020 02:45:42,0:00:13,"('Download: 25757.91 Kb/s', 'Upload: 12256.23 Kb/s', 'Ping: 4.583')",Céu limpo com poucas nuvens
@@ -31,3 +31,5 @@
 13/01/2020 04:00:38,13/01/2020 04:03:37,0:02:59,"('Download: 22465.89 Kb/s', 'Upload: 10043.00 Kb/s', 'Ping: 5.063')",chuva fraca
 13/01/2020 04:00:52,13/01/2020 04:03:37,0:02:45,"('Download: 4007.60 Kb/s', 'Upload: 7570.00 Kb/s', 'Ping: 6.176')",chuva fraca
 13/01/2020 11:53:03,13/01/2020 11:53:21,0:00:18,"('Download: 27668.36 Kb/s', 'Upload: 11949.00 Kb/s', 'Ping: 4.84')",chuva fraca
+15/01/2020 04:13:31,15/01/2020 04:13:40,0:00:09,"('Download: 28088.36 Kb/s', 'Upload: 12048.00 Kb/s', 'Ping: 5.421')",nuvens dispersas
+15/01/2020 20:36:01,15/01/2020 20:36:15,5:10:14,"('Download: 27 MB/s', 'Upload: 11 MB/s', 'Ping: 5')",céu limpo
