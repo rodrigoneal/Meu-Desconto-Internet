@@ -106,7 +106,7 @@ if __name__ == '__main__':
                 lista.clear()
                 velocidade = requisicao.speed()
                 clima = conexao.getClima(cidade)
-                push = conexao.pushbullet(diferenca, velocidade)
+                #push = conexao.pushbullet(diferenca, velocidade)
                 salvar = requisicao.salvar(*diferenca, velocidade, clima, path=path)
                 tupla = (*diferenca, *velocidade, clima)
                 dml = DB.insert(tupla)

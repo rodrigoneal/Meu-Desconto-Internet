@@ -7,6 +7,7 @@ import time
 import requests
 from datetime import datetime
 from pushbullet import Pushbullet
+import DB
 
 
 def pushbullet(*mensagem):
@@ -302,44 +303,38 @@ class Requisicao:
         print(
             f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
-    def media_internet(self, vdown, vup):
-        lista = []
-        down = []
-        up = []
-        ping = []
-        contratado_down = vdown
-        contratado_up = vup
-        with open('log.csv', 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            ler = csv.reader(csvfile)
-            for i in ler:
-                lista.append(i[3])
+    def media_internet(self, vdown, vup):  # Já em DB
 
-        for i in range(len(lista)):
-            down.append(int(lista[i][12:14]))
-            up.append(int(lista[i][31:33]))
-            if lista[i][47].isdigit():
-                ping.append(int(lista[i][47]))
-            elif lista[i][48].isdigit():
-                ping.append(int(lista[i][48]))
-            elif lista[i][49].isdigit():
-                ping.append(int(lista[i][49]))
+        somadown = []
+        somaup = []
+        somaping = []
+        contratado_down = float(input('Qual a velocidade de Download contratada em MB: '))
+        contratado_up = float(input('Qual a velocidade de Upload contratada em MB: '))
+        down = DB.select('down')
+        up = DB.select('up')
+        ping = DB.select('ping')
+        for i in down:
+            for v in i:
+                somadown.append(v)
+        for i in up:
+            for v in i:
+                somaup.append(v)
+        for i in ping:
+            for v in i:
+                somaping.append(v)
 
-        media_down = sum(down) / len(down)
-        media_down = round(media_down)
-        porcento_down = (media_down / contratado_down) * 100
-
-        media_up = sum(up) / len(up)
-        porcento_up = (media_up / contratado_up) * 100
-
-        media_ping = sum(ping) / len(ping)
-
-        print(f'Sua Internet contratada é de {contratado_down}MB de download e {contratado_up}MB de upload')
-        print(
-            f'A sua média de download foi {media_down:.1f}MB correspondendo à {porcento_down:.1f}% da sua velocidade '
-            f'contratada')
-        print(
-            f'A sua média de Upload foi {media_up:.1f}MB correspondendo à {porcento_up:.1f}% da sua velocidade contratada')
-        print(f'Sua Média de latencia foi de {media_ping:.0f}')
+        mediadown = sum(somadown) / len(somadown)
+        mediaup = sum(somaup) / len(somaup)
+        mediaping = sum(somaping) / len(somaping)
+        porcento_down = (mediadown / contratado_down) * 100
+        porcento_up = (mediaup / contratado_up) * 100
+        print(f'A sua media de Download foi de {mediadown:.2f} MB')
+        print(f'A sua media de Upload foi de {mediaup:.2f} MB')
+        print(f'A sua media de ping foi de {mediaping:.2f} ms')
+        print("")
+        print(f'Com isso você está recebendo {porcento_down:.2f}% da sua internet contratada para Download', end='')
+        print(f' e {porcento_up:.2f}% da sua internet contratada para Upload')
+        print(f'Seu maior ping foi {max(somaping)}ms e o menor foi {min(somaping)}ms')
 
     # Fim dos metodos do menu
 
@@ -365,7 +360,7 @@ class Requisicao:
             ping = (round(res["ping"]))
             return down, up, ping
         except:
-            return None
+            pass
 
     def cronometro(self, tempo, mensagem):
         """
