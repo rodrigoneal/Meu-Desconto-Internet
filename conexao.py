@@ -27,8 +27,10 @@ def getHora():
 
     """
     now = datetime.now()
-    hora = now.strftime("%d/%m/%Y, %H:%M:%S")
-    return hora
+    dia_hora = now.strftime("%d/%m/%Y, %H:%M:%S")
+    dia = dia_hora.split(',')[0]
+    hora = dia_hora.split(',')[1].lstrip()
+    return dia, hora
 
 
 def getClima(cidade):
@@ -55,6 +57,7 @@ class Requisicao:
     Classe que faz desde a requisição até salvar em CSV
 
     """
+
     # Começo arquivos de inicialização
     def __init__(self, url):
         self.url = url
@@ -68,13 +71,14 @@ class Requisicao:
         :return hora dessa requisição
 
         """
-        hora = getHora()
+        dia = getHora()[0]
+        hora = getHora()[1]
         try:
             requests.get(self.url, timeout=5)
 
-            return 1, hora
+            return 1, dia, hora
         except:
-            return 2, hora
+            return 2, dia, hora
 
     def diferenca(self, lista):
         """
@@ -84,14 +88,21 @@ class Requisicao:
         :return a hora que caiu e a hora que voltou mais e o calculo do tempo que ficou sem internet em minutos.
 
         """
-        queda = str(lista[0][1]).replace(',', '')
-        volta = str(lista[-1][1]).replace(',', '')
+        queda_data = str(lista[0][1])  # Data que a internet caiu
+        queda_hora = str(lista[0][2])  # Hora que a internet caiu
+
+        volta_data = str(lista[-1][1])  # Data que a internet voltou
+        volta_hora = str(lista[-1][2])  # Data que a internet voltou
+
+        queda_convertida = f'{queda_data} {queda_hora}'
+        volta_convertida = f'{volta_data} {volta_hora}'
+
         fmt = '%d/%m/%Y %H:%M:%S'
-        d1 = datetime.strptime(queda, fmt)
-        d2 = datetime.strptime(volta, fmt)
+        d1 = datetime.strptime(queda_convertida, fmt)
+        d2 = datetime.strptime(volta_convertida, fmt)
         tempooff = (d2 - d1)
         tempooff = str(tempooff)
-        return queda, volta, tempooff
+        return queda_hora, queda_data, volta_hora, volta_data, tempooff
 
     def salvar(self, *args, path):
         """
@@ -329,7 +340,6 @@ class Requisicao:
         print(
             f'A sua média de Upload foi {media_up:.1f}MB correspondendo à {porcento_up:.1f}% da sua velocidade contratada')
         print(f'Sua Média de latencia foi de {media_ping:.0f}')
-
 
     # Fim dos metodos do menu
 

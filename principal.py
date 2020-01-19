@@ -25,7 +25,7 @@ def sistema():
 
 
 if __name__ == '__main__':
-
+    dml = DB.create()
     """
     Menu simples
     
@@ -107,9 +107,8 @@ if __name__ == '__main__':
                 velocidade = requisicao.speed()
                 clima = conexao.getClima(cidade)
                 push = conexao.pushbullet(diferenca, velocidade)
-                salvar = requisicao.salvar(*diferenca, velocidade, clima,
-                                           path=path)  # Salva essa diferença em um arquivo CSV
-                tupla = (diferenca[0], diferenca[1], diferenca[2], velocidade[0], velocidade[1], velocidade[2], clima)
+                salvar = requisicao.salvar(*diferenca, velocidade, clima, path=path)
+                tupla = (*diferenca, *velocidade, clima)
                 dml = DB.insert(tupla)
                 break
 

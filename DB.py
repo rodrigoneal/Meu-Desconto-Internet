@@ -1,10 +1,32 @@
 import sqlite3
 
+def create():
+    try:
+        conn = sqlite3.connect('registro.db')
+        cursor = conn.cursor()
+        cursor.execute(
+
+        """CREATE TABLE registro(
+        quedahora DATETIME NOT NULL,
+        quedadata DATETIME NOT NULL,
+        voltahora DATETIME NOT NULL,
+        voltadata DATETIME NOT NULL,
+        tempo DATETIME NOT NULL,
+        down INT ,
+        up INT ,
+        ping INT ,
+        clima TEXT
+    );""")
+        print('tabela criada com sucesso')
+        conn.close()
+    except:
+        pass
 
 def insert(*args):
     conn = sqlite3.connect('registro.db')
     cursos = conn.cursor()
-    cursos.executemany("""INSERT INTO registro(queda,volta,tempo,down,up,ping,clima) VALUES(?,?,?,?,?,?,?)""", args)
+    cursos.executemany("""INSERT INTO registro(quedahora,quedadata,voltahora,voltadata,tempo,down,up,ping,
+    clima) VALUES(?,?,?,?,?,?,?,?,?)""", args)
     conn.commit()
     conn.close()
 
