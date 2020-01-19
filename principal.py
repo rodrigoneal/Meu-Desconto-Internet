@@ -4,7 +4,8 @@
 import datetime
 import os
 import sys
-import time
+import time, DB
+import sqlite3
 
 import conexao
 from conexao import Requisicao
@@ -108,9 +109,9 @@ if __name__ == '__main__':
                 push = conexao.pushbullet(diferenca, velocidade)
                 salvar = requisicao.salvar(*diferenca, velocidade, clima,
                                            path=path)  # Salva essa diferença em um arquivo CSV
+                tupla = (diferenca[0], diferenca[1], diferenca[2], velocidade[0], velocidade[1], velocidade[2], clima)
+                dml = DB.insert(tupla)
                 break
 
         mensagem = 'Internet sem falha'
         tempo = requisicao.cronometro(1, mensagem)
-        hoje = datetime.date.today()
-        print(hoje)
