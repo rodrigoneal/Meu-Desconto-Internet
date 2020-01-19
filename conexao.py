@@ -350,9 +350,9 @@ class Requisicao:
             s.download()
             s.upload()
             res = s.results.dict()
-            down = ('Download: {:.0f} MB/s'.format(round(res["download"] / 1024 / 1024)))
-            up = ('Upload: {:.0f} MB/s'.format(round(res["upload"] / 1024 / 1024)))
-            ping = ('Ping: {:.0f}'.format(res["ping"]))
+            down = (round(res["download"] / 1024 / 1024))
+            up = (round(res["upload"] / 1024 / 1024))
+            ping = (round(res["ping"]))
             return down, up, ping
         except:
             return None
