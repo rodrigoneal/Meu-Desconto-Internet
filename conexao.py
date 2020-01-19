@@ -9,14 +9,14 @@ from datetime import datetime
 from pushbullet import Pushbullet
 
 
-def pushbullet(mensagem):
+def pushbullet(*mensagem):
     for i in mensagem:
         envio = str(mensagem)
     try:
         token = 'o.pefpmkVrXSzUGUAKpnYjgArR5STuus9h'
         pb = Pushbullet(token)
         celular = pb.devices[0]
-        push = pb.push_note("A internet Acabou de se recuperar", envio, celular)
+        pb.push_note("A internet Acabou de se recuperar", envio, celular)
     except:
         raise print('Falha ao enviar mensagem')
 
@@ -55,7 +55,7 @@ class Requisicao:
     Classe que faz desde a requisição até salvar em CSV
 
     """
-
+    # Começo arquivos de inicialização
     def __init__(self, url):
         self.url = url
 
@@ -76,16 +76,6 @@ class Requisicao:
         except:
             return 2, hora
 
-    def salvar(self, *args, path):
-        """
-        Salva um arquivo CSV no caminho(path) informado
-
-        """
-
-        with open(path, 'a', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.writer(csvfile)
-            escrever.writerow(args)
-
     def diferenca(self, lista):
         """
         Recebe  uma lista de requisição, pega a primeira e a ultima tentativa de conexão. Muda o tempo para String
@@ -103,54 +93,135 @@ class Requisicao:
         tempooff = str(tempooff)
         return queda, volta, tempooff
 
-    def cronometro(self, tempo, mensagem):
+    def salvar(self, *args, path):
         """
-        Recebe um tempo e uma mensagem e faz um cronometro com o tempo informado para que não seja feita muitas
-        requisições ao mesmo servidor
+        Salva um arquivo CSV no caminho(path) informado
 
-        """
-        cont = tempo - 1
-        for i in range(tempo):
-            for v in range(59, -1, -1):
-                print(mensagem)
-                if cont >= 1 and v >= 10:
-                    print(f'Nova analise em {cont}:{v} minutos', flush=True)
-
-                elif cont >= 1 and v < 10:
-                    print(f'Nova analise em {cont}:{0}{v} Minutos', flush=True)
-
-                elif cont < 1 and v >= 10:
-                    print(f'Nova analise em {v} segundos', flush=True)
-
-
-                elif cont < 1 and v < 10:
-                    print(f'Nova analise em {0}{v} segundos', flush=True)
-
-                time.sleep(1)
-                os.system('cls')
-            cont -= 1
-
-    def speed(self):
-        """
-        Faz um teste de velocidade após a internet voltar a funcionar
-
-        :return: velocidad de download, upload e o ping
         """
 
-        try:
-            import speedtest
-            s = speedtest.Speedtest()
-            s.get_servers()
-            s.get_best_server()
-            s.download()
-            s.upload()
-            res = s.results.dict()
-            down = ('Download: {:.0f} MB/s'.format(round(res["download"] / 1024 / 1024)))
-            up = ('Upload: {:.0f} MB/s'.format(round(res["upload"] / 1024 / 1024)))
-            ping = ('Ping: {:.0f}'.format(res["ping"]))
-            return down, up, ping
-        except:
-            return None
+        with open(path, 'a', newline='', encoding="ISO-8859-1") as csvfile:
+            escrever = csv.writer(csvfile)
+            escrever.writerow(args)
+
+    # Começo arquivos de inicialização
+    # Começo dos metodos do menu
+    def menu(self):
+        """
+        Criação de um menu para simplificação na hora de mostrar a informação
+        :return: a opção que o usuario escolhe
+        """
+        print('*_*-' * 5, 'Menu', '*_*-' * 5)
+        print('Digite 1: Para Relatório por dia')
+        print('Digite 2: Para Relatório por mes')
+        print('Digite 3: Para Relatório de descontos')
+        print('Digite 4: Para Qualidade da sua internet')
+        print('Digite 5: Para Analise da internet')
+        print('Digite 6: Para Fechar o programa')
+        escolha = int(input(': '))
+        return escolha
+
+    def relatorio_dia(self):
+        lista = []
+        dados = []
+        segundos = []
+        minutos = []
+        horas = []
+        error = []
+        path = 'log.csv'
+        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
+            escrever = csv.reader(csvfile)
+            for i in escrever:
+                lista.append(i)
+        for i in range(len(lista)):
+            dados.append(lista[i][0][:10])
+        dados = sorted(set(dados))
+        print('Por favor')
+        for i in dados:
+            error.append(dados.index(i))
+
+            print(f'Digite {dados.index(i) + 1} para relatorio do dia {i}')
+
+        dia = int(input(': ')) - 1
+        while True:
+            if dia in error:
+                selecionado = dados[dia]
+                break
+            else:
+                print('Data Invalida')
+                selecionado = int(input('Digite Uma data Valida '))
+        for i in range(len(lista)):
+            if selecionado == lista[i][0][:10]:
+                converter = str(lista[i][2])
+                converter = converter.split(':')
+                segundos.append(int(converter[2]))
+                minutos.append(int(converter[1]))
+                horas.append(int(converter[0]))
+        segundos = sum(segundos)
+        minutos = sum(minutos)
+        horas = sum(horas)
+        for i in range(len(lista)):
+            if segundos >= 60:
+                minutos += 1
+                segundos -= 60
+            if minutos >= 60:
+                horas += 1
+                minutos -= 60
+        s = f'{horas}:{minutos}:{segundos}'
+        fmt = '%H:%M:%S'
+        d1 = datetime.strptime(s, fmt)
+        data = str(d1)[11:]
+        print(f'No dia {dados[dia]} você ficou {data} sem internet')
+
+    def relatorio_mes(self):
+        from calendar import month_name
+        path = 'log.csv'
+        mes = []
+        lista = []
+        hora = []
+        minuto = []
+        segundo = []
+        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
+            escrever = csv.reader(csvfile)
+            indice = escrever
+
+            for i in indice:
+                try:
+                    lista.append(i)
+                    mes.append(i[0][3:5])
+                except:
+                    IndexError
+        mes = sorted(set(mes))
+        for i in mes:
+            print(f'Digite {mes.index(i) + 1} para o mes de {month_name[int(i)].capitalize()}')
+
+        escolha = int(input(': ')) - 1
+        for i in range(len(lista)):
+            try:
+                if lista[i][0][3:5] == mes[escolha]:
+                    get = (lista[i][2])
+                    get = get.split(':')
+                    segundo.append(int(get[2]))
+                    minuto.append(int(get[1]))
+                    hora.append(int(get[0]))
+            except:
+                IndexError
+        segundo = sum(segundo)
+        minuto = sum(minuto)
+        hora = sum(hora)
+        dia = 0
+        cont = 0
+        while cont < len(lista):
+            if segundo > 59:
+                minuto += 1
+                segundo -= 59
+            if minuto > 59:
+                hora += 1
+                minuto -= 59
+            if hora > 23:
+                dia += 1
+                hora -= 23
+            cont += 1
+        print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
 
     def desconto(self):
         """
@@ -220,122 +291,6 @@ class Requisicao:
         print(
             f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
-    def relatorio_dia(self):
-        lista = []
-        dados = []
-        segundos = []
-        minutos = []
-        horas = []
-        error = []
-        path = 'log.csv'
-        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.reader(csvfile)
-            for i in escrever:
-                lista.append(i)
-        for i in range(len(lista)):
-            dados.append(lista[i][0][:10])
-        dados = sorted(set(dados))
-        print('Por favor')
-        for i in dados:
-            error.append(dados.index(i))
-
-            print(f'Digite {dados.index(i) + 1} para relatorio do dia {i}')
-
-        dia = int(input(': ')) - 1
-        while True:
-            if dia in error:
-                selecionado = dados[dia]
-                break
-            else:
-                print('Data Invalida')
-                selecionado = int(input('Digite Uma data Valida '))
-        for i in range(len(lista)):
-            if selecionado == lista[i][0][:10]:
-                converter = str(lista[i][2])
-                converter = converter.split(':')
-                segundos.append(int(converter[2]))
-                minutos.append(int(converter[1]))
-                horas.append(int(converter[0]))
-        segundos = sum(segundos)
-        minutos = sum(minutos)
-        horas = sum(horas)
-        for i in range(len(lista)):
-            if segundos >= 60:
-                minutos += 1
-                segundos -= 60
-            if minutos >= 60:
-                horas += 1
-                minutos -= 60
-        s = f'{horas}:{minutos}:{segundos}'
-        fmt = '%H:%M:%S'
-        d1 = datetime.strptime(s, fmt)
-        data = str(d1)[11:]
-        print(f'No dia {dados[dia]} você ficou {data} sem internet')
-
-    def menu(self):
-        print('*_*-' * 5, 'Menu', '*_*-' * 5)
-        print('Digite 1: Para Relatório por dia')
-        print('Digite 2: Para Relatório por mes')
-        print('Digite 3: Para Relatório de descontos')
-        print('Digite 4: Para Qualidade da sua internet')
-        print('Digite 5: Para Analise da internet')
-        print('Digite 6: Para Fechar o programa')
-        escolha = int(input(': '))
-        return escolha
-
-    def relatorio_mes(self):
-
-        from calendar import month_name
-
-        path = 'log.csv'
-        mes = []
-        lista = []
-        hora = []
-        minuto = []
-        segundo = []
-        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.reader(csvfile)
-            indice = escrever
-
-            for i in indice:
-                try:
-                    lista.append(i)
-                    mes.append(i[0][3:5])
-                except:
-                    IndexError
-        mes = sorted(set(mes))
-        for i in mes:
-            print(f'Digite {mes.index(i) + 1} para o mes de {month_name[int(i)].capitalize()}')
-
-        escolha = int(input(': ')) - 1
-        for i in range(len(lista)):
-            try:
-                if lista[i][0][3:5] == mes[escolha]:
-                    get = (lista[i][2])
-                    get = get.split(':')
-                    segundo.append(int(get[2]))
-                    minuto.append(int(get[1]))
-                    hora.append(int(get[0]))
-            except:
-                IndexError
-        segundo = sum(segundo)
-        minuto = sum(minuto)
-        hora = sum(hora)
-        dia = 0
-        cont = 0
-        while cont < len(lista):
-            if segundo > 59:
-                minuto += 1
-                segundo -= 59
-            if minuto > 59:
-                hora += 1
-                minuto -= 59
-            if hora > 23:
-                dia += 1
-                hora -= 23
-            cont += 1
-        print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
-
     def media_internet(self, vdown, vup):
         lista = []
         down = []
@@ -351,11 +306,15 @@ class Requisicao:
         for i in range(len(lista)):
             down.append(int(lista[i][12:14]))
             up.append(int(lista[i][31:33]))
-            ping.append(int(lista[i][48]))
+            if lista[i][47].isdigit():
+                ping.append(int(lista[i][47]))
+            elif lista[i][48].isdigit():
+                ping.append(int(lista[i][48]))
+            elif lista[i][49].isdigit():
+                ping.append(int(lista[i][49]))
 
         media_down = sum(down) / len(down)
         media_down = round(media_down)
-        print(media_down)
         porcento_down = (media_down / contratado_down) * 100
 
         media_up = sum(up) / len(up)
@@ -363,8 +322,60 @@ class Requisicao:
 
         media_ping = sum(ping) / len(ping)
 
-        print(f'Sua Internet contratada é de {contratado_down} de download e {contratado_up} de upload')
-        print(f'A sua média de download foi {media_down} correspondendo à {porcento_down}% da sua velocidade '
-              f'contratada')
-        print(f'A sua média de Upload foi {media_up} correspondendo à {porcento_up}% da sua velocidade contratada')
-        print(f'Sua Média de latencia foi de {media_ping}')
+        print(f'Sua Internet contratada é de {contratado_down}MB de download e {contratado_up}MB de upload')
+        print(
+            f'A sua média de download foi {media_down:.1f}MB correspondendo à {porcento_down:.1f}% da sua velocidade '
+            f'contratada')
+        print(
+            f'A sua média de Upload foi {media_up:.1f}MB correspondendo à {porcento_up:.1f}% da sua velocidade contratada')
+        print(f'Sua Média de latencia foi de {media_ping:.0f}')
+
+
+    # Fim dos metodos do menu
+
+    # Começo dos arquivos de analise
+
+    def speed(self):
+        """
+        Faz um teste de velocidade após a internet voltar a funcionar
+
+        :return: velocidad de download, upload e o ping
+        """
+
+        try:
+            import speedtest
+            s = speedtest.Speedtest()
+            s.get_servers()
+            s.get_best_server()
+            s.download()
+            s.upload()
+            res = s.results.dict()
+            down = ('Download: {:.0f} MB/s'.format(round(res["download"] / 1024 / 1024)))
+            up = ('Upload: {:.0f} MB/s'.format(round(res["upload"] / 1024 / 1024)))
+            ping = ('Ping: {:.0f}'.format(res["ping"]))
+            return down, up, ping
+        except:
+            return None
+
+    def cronometro(self, tempo, mensagem):
+        """
+        Recebe um tempo e uma mensagem e faz um cronometro com o tempo informado para que não seja feita muitas
+        requisições ao mesmo servidor
+
+        """
+        cont = tempo - 1
+        for i in range(tempo):
+            for v in range(59, -1, -1):
+                print(mensagem)
+                if cont >= 1 and v >= 10:
+                    print(f'Nova analise em {cont}:{v} minutos', flush=True)
+                elif cont >= 1 and v < 10:
+                    print(f'Nova analise em {cont}:{0}{v} Minutos', flush=True)
+                elif cont < 1 and v >= 10:
+                    print(f'Nova analise em {v} segundos', flush=True)
+                elif cont < 1 and v < 10:
+                    print(f'Nova analise em {0}{v} segundos', flush=True)
+
+                time.sleep(1)
+                os.system('cls')
+            cont -= 1

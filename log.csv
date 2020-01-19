@@ -1,6 +1,6 @@
 07/01/2020 03:20:51,07/01/2020 11:41:14,8:20:23,"('Download: 20 MB/s', 'Upload: 11 MB/s', 'Ping: 4')"
 07/01/2020 19:12:21,07/01/2020 20:45:58,1:33:37,"('Download: 26 MB/s', 'Upload: 12 MB/s', 'Ping: 8')"
-07/01/2020 22:30:22,08/01/2020 10:05:28,11:35:06,"('Download:28 MB/s', 'Upload: 06 MB/s', 'Ping:  6')"
+07/01/2020 22:30:22,08/01/2020 10:05:28,11:35:06,"('Download:28 MB/s', 'Upload: 06 MB/s', 'Ping: 6')"
 10/01/2020 01:58:09,10/01/2020 01:58:34,0:00:25,"('Download: 25 MB/s', 'Upload: 11 MB/s', 'Ping: 4')",Céu limpo com poucas nuvens
 10/01/2020 02:16:42,10/01/2020 02:17:13,0:00:31,"('Download: 26 MB/s', 'Upload: 11 MB/s', 'Ping: 3)",Céu limpo com poucas nuvens
 10/01/2020 02:18:47,10/01/2020 02:18:59,0:00:12,"('Download: 28 MB/s', 'Upload: 11 MB/s', 'Ping: 5')",Céu limpo com poucas nuvens
@@ -33,3 +33,6 @@
 13/01/2020 11:53:03,13/01/2020 11:53:21,0:00:18,"('Download: 27 MB/s', 'Upload: 11 MB/s', 'Ping: 4')",chuva fraca
 15/01/2020 04:13:31,15/01/2020 04:13:40,0:00:09,"('Download: 28 MB/s', 'Upload: 12 MB/s', 'Ping: 5')",nuvens dispersas
 15/01/2020 20:36:01,15/01/2020 20:36:15,5:10:14,"('Download: 27 MB/s', 'Upload: 11 MB/s', 'Ping: 5')",céu limpo
+16/01/2020 19:27:31,16/01/2020 19:27:47,0:00:16,"('Download: 15 MB/s', 'Upload: 5 MB/s',  'Ping: 7')",Céu limpo com poucas nuvens
+16/01/2020 19:27:33,16/01/2020 19:27:46,0:00:13,"('Download: 11 MB/s', 'Upload: 9 MB/s',  'Ping: 6')",Céu limpo com poucas nuvens
+18/01/2020 04:01:29,18/01/2020 04:02:43,0:01:14,"('Download: 27 MB/s', 'Upload: 9 MB/s', 'Ping: 4')",nublado

@@ -14,11 +14,15 @@ path = 'log.csv'
 requisicao = Requisicao(url)
 lista = []
 cidade = 'Rio de Janeiro'
+
+
 def sistema():
     if os.name == 'posix':
         os.system('clear')
     else:
         os.system('cls')
+
+
 if __name__ == '__main__':
 
     """
@@ -52,7 +56,7 @@ if __name__ == '__main__':
         elif selecionar == 5:
             sistema()
             break
-        elif selecionar == 5:
+        elif selecionar == 6:
             sys.exit()
 
         else:
@@ -60,10 +64,6 @@ if __name__ == '__main__':
             print('Favor digitar uma opção valida')
             time.sleep(5)
             sistema()
-
-
-
-
 
     while True:
         """
@@ -102,12 +102,12 @@ if __name__ == '__main__':
                 conectar = requisicao.conectar()
                 lista.append(conectar)
                 diferenca = requisicao.diferenca(lista)
-                # sem internet
                 lista.clear()
-                push = conexao.pushbullet(diferenca)
                 velocidade = requisicao.speed()
                 clima = conexao.getClima(cidade)
-                salvar = requisicao.salvar(*diferenca, velocidade, clima, path=path)  # Salva essa diferença em um arquivo CSV
+                push = conexao.pushbullet(diferenca, velocidade)
+                salvar = requisicao.salvar(*diferenca, velocidade, clima,
+                                           path=path)  # Salva essa diferença em um arquivo CSV
                 break
 
         mensagem = 'Internet sem falha'
