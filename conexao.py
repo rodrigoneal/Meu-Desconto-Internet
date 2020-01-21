@@ -235,7 +235,7 @@ class Requisicao:
             cont += 1
         print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
 
-    def desconto(self):
+    def desconto(self, num = 0): # Já em DB(2.0)
         """
         Varre o registro log.csv e faz um calculo do tempo que ficou sem internet
 
@@ -244,27 +244,20 @@ class Requisicao:
 
         """
 
-        lista = []
-        hora = []
-        minuto = []
         segundo = []
-        path = 'log.csv'
-        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.reader(csvfile)
-            for i in escrever:
-                try:
-                    lista.append(i[2])
-                except:
-                    pass
+        minuto = []
+        hora = []
+        db = DB.select('tempo, quedadata')
+        mes = datetime.now().month
+        lista = [db[i][0] for i in range(len(db)) if int(db[i][1][4]) == mes]
         for i in lista:
-            s = i
-            t = s.split(':')
-            hora.append(int(t[0]))
-            minuto.append(int(t[1]))
-            segundo.append(int(t[2]))
-        hora = sum(hora)
-        minuto = sum(minuto)
+            i = i.split(':')
+            segundo.append(int(i[2]))
+            minuto.append(int(i[1]))
+            hora.append(int(i[0]))
         segundo = sum(segundo)
+        minuto = sum(minuto)
+        hora = sum(hora)
         dia = 0
         getdia = 0
         preco_dia = 0
@@ -273,7 +266,7 @@ class Requisicao:
         PRECO_MINUTO = PRECO_HORA / 60
         PRECO_SEGUNDO = PRECO_MINUTO / 60
 
-        while cont < len(lista):
+        while cont < len(db):
             if segundo > 59:
                 minuto += 1
                 segundo -= 59
@@ -300,16 +293,18 @@ class Requisicao:
         fmt = '%H:%M:%S'
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
-        print(
-            f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+        if num == 1:
+            print(f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+
+        return desconto, mes
 
     def media_internet(self, vdown, vup):  # Já em DB
 
         somadown = []
         somaup = []
         somaping = []
-        contratado_down = float(input('Qual a velocidade de Download contratada em MB: '))
-        contratado_up = float(input('Qual a velocidade de Upload contratada em MB: '))
+        contratado_down = vdown
+        contratado_up = vup
         down = DB.select('down')
         up = DB.select('up')
         ping = DB.select('ping')

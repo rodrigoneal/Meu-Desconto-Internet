@@ -26,6 +26,7 @@ def sistema():
 
 if __name__ == '__main__':
     dml = DB.create()
+    desconto = DB.desconto()
     """
     Menu simples
     
@@ -44,7 +45,7 @@ if __name__ == '__main__':
             sistema()
         elif selecionar == 3:
             sistema()
-            relatorio_desconto = requisicao.desconto()
+            relatorio_desconto = requisicao.desconto(num=1)
             time.sleep(5)
             sistema()
         elif selecionar == 4:
