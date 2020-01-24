@@ -88,7 +88,7 @@ def update(banco, tabela, coluna, valor):
 def desconto():
     from calendar import month_name
     requisicao = Requisicao('url')
-    desconto1 = requisicao.desconto()
+    desconto1 = requisicao.desconto(False)
     mes_db = month_name[desconto1[1]]
 
     DB.update('2020', 'desconto', mes_db, desconto1[0])

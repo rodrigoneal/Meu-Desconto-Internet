@@ -54,7 +54,11 @@ def conversor_tempo(lista, num=1):
     fmt = '%H:%M:%S'
     d1 = datetime.strptime(s, fmt)
     string = str(d1)[11:]
-    return dia, string
+    if num == 1:
+        return dia, string
+    else:
+        return dia, horas, minutos, segundos
+
 
 
 def getHora():
@@ -178,7 +182,7 @@ class Requisicao:
         d1 = conversor_tempo(tempo)
         print(d1)
 
-    def relatorio_mes(self):
+    def relatorio_mes(self):  # Já em DB
         lista = []
         pegar = []
         dicio = {}
@@ -206,7 +210,7 @@ class Requisicao:
         for i in dia:
             print(f'{i[:2]}, ', end='')
 
-    def desconto(self, num=0):  # Já em DB(2.0)
+    def desconto(self, num=True):  # Já em DB(2.0)
         """
         Varre o registro log.csv e faz um calculo do tempo que ficou sem internet
 
@@ -215,60 +219,31 @@ class Requisicao:
 
         """
 
-        segundo = []
-        minuto = []
-        hora = []
-        db = DB.select('tempo, quedadata')
-        mes = datetime.now().month
-        lista = [db[i][0] for i in range(len(db)) if int(db[i][1][4]) == mes]
-        for i in lista:
-            i = i.split(':')
-            segundo.append(int(i[2]))
-            minuto.append(int(i[1]))
-            hora.append(int(i[0]))
-        segundo = sum(segundo)
-        minuto = sum(minuto)
-        hora = sum(hora)
         dia = 0
-        getdia = 0
         preco_dia = 0
-        cont = 0
         PRECO_HORA = 0.25
         PRECO_MINUTO = PRECO_HORA / 60
         PRECO_SEGUNDO = PRECO_MINUTO / 60
-
-        while cont < len(db):
-            if segundo > 59:
-                minuto += 1
-                segundo -= 59
-            if minuto > 59:
-                hora += 1
-                minuto -= 59
-            if hora >= 23:
-                dia += 1
-                hora -= 23
-                getdia = dia
-            cont += 1
-            if getdia >= 1:
-                preco_dia += 6
-                getdia = - 1
-        preco_hora = PRECO_HORA * hora
-        preco_minuto = PRECO_MINUTO * minuto
-        preco_segundo = PRECO_SEGUNDO * segundo
+        db = DB.select('tempo, quedadata')
+        mes = datetime.now().month
+        lista = [db[i][0] for i in range(len(db)) if int(db[i][1][4]) == mes]
+        d1 = conversor_tempo(lista, 0)
+        preco_hora = PRECO_HORA * d1[1]
+        preco_minuto = PRECO_MINUTO * d1[2]
+        preco_segundo = PRECO_SEGUNDO * d1[3]
         desconto = preco_dia + preco_hora + preco_minuto + preco_segundo
         desconto = round(desconto, 2)
 
         desconto = str(desconto)
         desconto = desconto.replace('.', ',')
-        s = f'{hora}:{minuto}:{segundo}'
+        s = f'{d1[1]}:{d1[2]}:{d1[3]}'
         fmt = '%H:%M:%S'
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
-        if num == 1:
-            print(
-                f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
-
-        return desconto, mes
+        if num:
+            print(f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+        else:
+            return desconto, mes
 
     def media_internet(self, vdown, vup):  # Já em DB
 
