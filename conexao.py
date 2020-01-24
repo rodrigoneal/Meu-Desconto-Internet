@@ -22,6 +22,41 @@ def pushbullet(*mensagem):
         raise print('Falha ao enviar mensagem')
 
 
+def conversor_tempo(lista, num=1):
+    dia = 0
+    segundos = []
+    minutos = []
+    horas = []
+    converter = []
+
+    for i in range(len(lista)):
+        pegar = str(lista[i])
+        converter.append(pegar.replace(',', '').replace("'", '').replace(')', '').replace('(', '').split(':'))
+    for i in range(len(lista)):
+        segundos.append(int(converter[i][2]))
+        minutos.append(int(converter[i][1]))
+        horas.append(int(converter[i][0]))
+
+    segundos = sum(segundos)
+    minutos = sum(minutos)
+    horas = sum(horas)
+    for i in range(len(lista)):
+        if segundos >= 59:
+            minutos += 1
+            segundos -= 60
+        if minutos > 59:
+            horas += 1
+            minutos -= 60
+        if horas >= 24:
+            dia += 1
+            horas -= 24
+    s = f'{horas}:{minutos}:{segundos}'
+    fmt = '%H:%M:%S'
+    d1 = datetime.strptime(s, fmt)
+    string = str(d1)[11:]
+    return dia, string
+
+
 def getHora():
     """
     :return a hora atual já convertida para o ABNT
@@ -105,16 +140,6 @@ class Requisicao:
         tempooff = str(tempooff)
         return queda_hora, queda_data, volta_hora, volta_data, tempooff
 
-    def salvar(self, *args, path):
-        """
-        Salva um arquivo CSV no caminho(path) informado
-
-        """
-
-        with open(path, 'a', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.writer(csvfile)
-            escrever.writerow(args)
-
     # Começo arquivos de inicialização
     # Começo dos metodos do menu
     def menu(self):
@@ -132,110 +157,56 @@ class Requisicao:
         escolha = int(input(': '))
         return escolha
 
-    def relatorio_dia(self):
-        lista = []
-        dados = []
-        segundos = []
-        minutos = []
-        horas = []
-        error = []
-        path = 'log.csv'
-        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.reader(csvfile)
-            for i in escrever:
-                lista.append(i)
+    def relatorio_dia(self):  # Já em DB
+        db = DB.select('quedadata')
+        lista = [i for i in db]
+        lista = list(set(lista))
+        lista.sort()
+        dicionario = {}
         for i in range(len(lista)):
-            dados.append(lista[i][0][:10])
-        dados = sorted(set(dados))
-        print('Por favor')
-        for i in dados:
-            error.append(dados.index(i))
+            dicionario[i] = lista[i]
+        for c, v in dicionario.items():
+            print(f'Digite {c + 1} para o relatorio do dia {v}')
 
-            print(f'Digite {dados.index(i) + 1} para relatorio do dia {i}')
-
-        dia = int(input(': ')) - 1
-        while True:
-            if dia in error:
-                selecionado = dados[dia]
-                break
-            else:
-                print('Data Invalida')
-                selecionado = int(input('Digite Uma data Valida '))
-        for i in range(len(lista)):
-            if selecionado == lista[i][0][:10]:
-                converter = str(lista[i][2])
-                converter = converter.split(':')
-                segundos.append(int(converter[2]))
-                minutos.append(int(converter[1]))
-                horas.append(int(converter[0]))
-        segundos = sum(segundos)
-        minutos = sum(minutos)
-        horas = sum(horas)
-        for i in range(len(lista)):
-            if segundos >= 60:
-                minutos += 1
-                segundos -= 60
-            if minutos >= 60:
-                horas += 1
-                minutos -= 60
-        s = f'{horas}:{minutos}:{segundos}'
-        fmt = '%H:%M:%S'
-        d1 = datetime.strptime(s, fmt)
-        data = str(d1)[11:]
-        print(f'No dia {dados[dia]} você ficou {data} sem internet')
+        selecionado = int(input(': '))
+        while selecionado > len(dicionario):
+            print('Valor invalido: ')
+            selecionado = int(input('Digite novamente:  '))
+        selecionado -= 1
+        data = dicionario[selecionado]
+        tempo = DB.where('tempo', 'quedadata', *data)
+        d1 = conversor_tempo(tempo)
+        print(d1)
 
     def relatorio_mes(self):
-        from calendar import month_name
-        path = 'log.csv'
-        mes = []
         lista = []
-        hora = []
-        minuto = []
-        segundo = []
-        with open(path, 'r', newline='', encoding="ISO-8859-1") as csvfile:
-            escrever = csv.reader(csvfile)
-            indice = escrever
+        pegar = []
+        dicio = {}
+        dia = []
+        mes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'
+                                                                                   'Setembro', 'Outubro', 'Novembro',
+               'Dezembro']
+        db = DB.select('quedadata')
 
-            for i in indice:
-                try:
-                    lista.append(i)
-                    mes.append(i[0][3:5])
-                except:
-                    IndexError
-        mes = sorted(set(mes))
-        for i in mes:
-            print(f'Digite {mes.index(i) + 1} para o mes de {month_name[int(i)].capitalize()}')
+        for i in db:
+            lista.append(*i)
 
-        escolha = int(input(': ')) - 1
+        lista = list(set(lista))
         for i in range(len(lista)):
-            try:
-                if lista[i][0][3:5] == mes[escolha]:
-                    get = (lista[i][2])
-                    get = get.split(':')
-                    segundo.append(int(get[2]))
-                    minuto.append(int(get[1]))
-                    hora.append(int(get[0]))
-            except:
-                IndexError
-        segundo = sum(segundo)
-        minuto = sum(minuto)
-        hora = sum(hora)
-        dia = 0
-        cont = 0
-        while cont < len(lista):
-            if segundo > 59:
-                minuto += 1
-                segundo -= 59
-            if minuto > 59:
-                hora += 1
-                minuto -= 59
-            if hora > 23:
-                dia += 1
-                hora -= 23
-            cont += 1
-        print(f'Em {month_name[escolha + 1]} Você ficou ficou {dia} dias {hora}:{minuto}:{segundo} sem internet')
+            pegar.append(lista[i][4])
+        pegar = list(set(pegar))
+        for i in range(len(pegar)):
+            dicio[i + 1] = mes[i + 1]
+        for i, v in dicio.items():
+            print(f'Selecione {i} para o mes de {v}')
+        selecionar = int(input(': '))
+        dia = [i for i in lista if int(i[4]) == selecionar]
+        print(f'No mês {mes[selecionar]} hoveram {len(dia)} quedas. Nos dias ', end='')
+        dia.sort()
+        for i in dia:
+            print(f'{i[:2]}, ', end='')
 
-    def desconto(self, num = 0): # Já em DB(2.0)
+    def desconto(self, num=0):  # Já em DB(2.0)
         """
         Varre o registro log.csv e faz um calculo do tempo que ficou sem internet
 
@@ -294,7 +265,8 @@ class Requisicao:
         d1 = datetime.strptime(s, fmt)
         data = str(d1)[11:]
         if num == 1:
-            print(f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
+            print(
+                f'Você ficou {dia} dias e {data} sem internet esse mês e o seu desconto na internet deve ser de R${desconto} \n')
 
         return desconto, mes
 
