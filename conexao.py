@@ -14,7 +14,7 @@ def pushbullet(*mensagem):
     for i in mensagem:
         envio = str(mensagem)
     try:
-        token = 'o.pefpmkVrXSzUGUAKpnYjgArR5STuus9h'
+        token = 
         pb = Pushbullet(token)
         celular = pb.devices[0]
         pb.push_note("A internet Acabou de se recuperar", envio, celular)
